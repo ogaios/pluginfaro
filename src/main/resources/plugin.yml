@@ -1,0 +1,26 @@
+name: ScentTracker
+version: '${project.version}'
+main: com.scenttracker.ScentTrackerPlugin
+api-version: '1.21'
+description: Mecânica imersiva de faro e rastreamento para servidores de RPG/RP.
+authors: [ScentTracker]
+
+commands:
+  farejar:
+    description: Fareja rastros deixados por jogadores e criaturas.
+    usage: /<command> [jogador|reload]
+    aliases: [sniff]
+
+permissions:
+  scenttracker.use:
+    description: Permite farejar rastros (o padrão pode ser mudado em permissions.use-default no config.yml).
+    default: true
+  scenttracker.bypass:
+    description: Quem tem esta permissão não deixa rastro.
+    default: false
+  scenttracker.reload:
+    description: Permite usar /farejar reload.
+    default: op
+  scenttracker.cooldown.bypass:
+    description: Ignora o cooldown do comando /farejar.
+    default: op

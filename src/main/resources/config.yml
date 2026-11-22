@@ -1,0 +1,150 @@
+# ============================================================
+#  ScentTracker - configuração
+#  Textos usam MiniMessage: https://docs.advntr.dev/minimessage/format.html
+# ============================================================
+
+# ------------------------------------------------------------
+#  Rastro passivo
+# ------------------------------------------------------------
+trail:
+  # A cada quantos segundos a posição de cada jogador é gravada
+  record-interval-seconds: 2
+  # Máximo de pontos guardados por jogador (fila circular)
+  max-points: 30
+  # Tempo (s) até um ponto do rastro expirar
+  max-age-seconds: 120
+  # Só grava um novo ponto se o alvo se mexeu pelo menos isto (blocos).
+  # Evita acumular pontos de quem está parado.
+  min-move-distance: 0.75
+
+  # Comportamento quando o jogador está agachado:
+  #   NORMAL = rastro normal | SHORT = rastro dura menos | SKIP = não deixa rastro
+  sneaking:
+    behavior: SHORT
+    short-lifetime-seconds: 20
+
+  # Comportamento quando o alvo está na água (mesmos valores acima)
+  water:
+    behavior: SKIP
+    short-lifetime-seconds: 15
+
+  # Rastro de criaturas (opcional). Só são rastreadas criaturas próximas de jogadores.
+  mobs:
+    enabled: false
+    types: [ZOMBIE, SKELETON, SPIDER, WOLF, FOX]
+    max-points: 15
+    # Limite global de criaturas rastreadas ao mesmo tempo (protege a performance)
+    max-tracked: 150
+    # Raio ao redor de cada jogador onde criaturas são rastreadas
+    scan-radius: 64
+
+# ------------------------------------------------------------
+#  Ação de farejar
+# ------------------------------------------------------------
+sniff:
+  # Raio máximo (blocos) para detectar um rastro
+  max-radius: 40
+  # Tempo (s) entre dois usos
+  cooldown-seconds: 15
+  # Por quantos segundos as partículas ficam visíveis (só para quem farejou)
+  duration-seconds: 10
+
+  # Idade do ponto mais próximo que define a mensagem exibida
+  freshness:
+    fresh-seconds: 20     # até aqui: "rastro fresco"
+    recent-seconds: 60    # até aqui: "rastro perceptível"; acima: "cheiro antigo"
+
+  sound:
+    # Chave do som (ex: entity.warden.sniff, entity.sniffer.sniffing). Vazio = sem som.
+    key: "entity.warden.sniff"
+    volume: 1.0
+    pitch: 1.0
+    # true = jogadores próximos também ouvem a fungada; false = só quem farejou
+    broadcast: true
+
+  particles:
+    # Aceita DUST (com cor) ou partículas sem dados extras, ex: SPORE_BLOSSOM_AIR, END_ROD
+    type: DUST
+    # Cores usadas no DUST: do ponto mais antigo (old) ao mais recente (fresh)
+    old-color: "#6B7280"
+    fresh-color: "#6EE7A8"
+    size: 1.0
+    # Distância entre partículas ao longo do rastro (blocos)
+    spacing: 0.6
+    # De quantos em quantos ticks as partículas são redesenhadas
+    interval-ticks: 5
+    # Partículas além desta distância do jogador não são enviadas
+    render-distance: 32
+    max-particles-per-tick: 250
+    # Saltos maiores que isto (blocos) entre dois pontos não são ligados (teleporte etc.)
+    max-segment-gap: 24
+
+# ------------------------------------------------------------
+#  Bônus de proximidade
+# ------------------------------------------------------------
+proximity:
+  enabled: true
+  # Se o alvo estiver a menos de X blocos, um pulso aparece na direção dele
+  radius: 15
+  # true = não avisa se houver blocos entre você e o alvo
+  require-line-of-sight: true
+  # Atraso (ticks) entre a mensagem do rastro e o aviso de proximidade
+  delay-ticks: 40
+  particle:
+    type: DUST
+    color: "#FF5555"
+    size: 1.4
+    count: 12
+
+# ------------------------------------------------------------
+#  Gatilho opcional por clique direito (além do comando)
+#  Obs.: o cliente NÃO envia evento ao clicar no ar com a mão vazia,
+#  então SNEAK_EMPTY_HAND só funciona clicando em blocos não interativos.
+# ------------------------------------------------------------
+interact:
+  enabled: false
+  # ITEM = segurando o item abaixo | SNEAK_EMPTY_HAND = agachado + mão vazia clicando num bloco
+  mode: ITEM
+  item: BONE
+
+# ------------------------------------------------------------
+#  Permissões
+# ------------------------------------------------------------
+permissions:
+  # Padrão de scenttracker.use: TRUE (todos), OP (só operadores), FALSE (ninguém), NOT_OP
+  use-default: TRUE
+
+# ------------------------------------------------------------
+#  Mensagens (PT-BR)
+#  Placeholders: <target> <direction> <seconds>
+# ------------------------------------------------------------
+messages:
+  prefix: "<dark_gray>[<gold>Faro</gold>]</dark_gray> "
+  no-permission: "<red>Você não tem permissão para isso."
+  players-only: "<red>Apenas jogadores podem farejar."
+  reload-success: "<green>Configuração do ScentTracker recarregada."
+  player-not-found: "<red>Jogador <white><target></white> não encontrado."
+  target-self: "<red>Você não consegue farejar o próprio rastro."
+
+  # Mensagens abaixo aparecem na Actionbar
+  cooldown: "<gray>Seu olfato ainda está cansado... <white><seconds>s</white>"
+  no-trail-found: "<gray><italic>Você fareja o ar, mas não sente nenhum rastro por perto..."
+  no-trail-player: "<gray><italic>Você não sente nenhum rastro recente de <white><target></white>..."
+  scent-fresh: "<green><italic>Você sente um rastro fresco de <white><target></white> seguindo para o <direction>..."
+  scent-recent: "<yellow><italic>O rastro de <white><target></white> ainda é perceptível, rumo ao <direction>..."
+  scent-old: "<gray><italic>Um cheiro antigo de <white><target></white> se perde em direção ao <direction>..."
+  scent-no-direction: "<yellow><italic>O cheiro de <white><target></white> é forte aqui, mas você não distingue para onde foi..."
+  scent-water-lost: "<aqua><italic>O cheiro de <white><target></white> se perdeu na água..."
+  proximity: "<red><italic>Algo está muito perto... na direção <direction>."
+  proximity-here: "<red><italic>O cheiro é fortíssimo... está bem perto de você!"
+
+# Nomes das direções (rosa dos ventos)
+directions:
+  NORTH: "Norte"
+  NORTH_EAST: "Nordeste"
+  EAST: "Leste"
+  SOUTH_EAST: "Sudeste"
+  SOUTH: "Sul"
+  SOUTH_WEST: "Sudoeste"
+  WEST: "Oeste"
+  NORTH_WEST: "Noroeste"
